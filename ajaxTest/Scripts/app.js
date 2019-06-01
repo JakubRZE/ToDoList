@@ -78,7 +78,7 @@
 function loadData() {
 
     $("#divTask children").remove();
-
+    debugger;
     $.ajax({
         url: '/List/getList',
         method: 'GET',
@@ -96,8 +96,8 @@ function loadData() {
                 $('#taskList').append(uList);
             });
         },
-        error: function (errorMessage) {
-            alert(errorMessage);
+        error: function (response) {
+            alert(response.responseText);
         }
     });
 

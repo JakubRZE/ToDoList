@@ -1,5 +1,8 @@
 ﻿using ajaxTest.DAL;
 using ajaxTest.Models;
+using ajaxTest.ViewModels;
+using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,8 +27,8 @@ namespace ajaxTest.Controllers
         {
             try
             {
-                    db.Lists.Add(list);
-                    db.SaveChanges();
+                db.Lists.Add(list);
+                db.SaveChanges();
             }
             catch (DataException dex)
             {
@@ -40,19 +43,44 @@ namespace ajaxTest.Controllers
 
         public JsonResult getList()
         {
-            List<List> lists = new List<List>();
-            lists = db.Lists.OrderByDescending(q => q.ID).ToList();
-            return Json(lists, JsonRequestBehavior.AllowGet);
+            bool proxyCreation = db.Configuration.ProxyCreationEnabled;
+
+            try
+            {
+                db.Configuration.ProxyCreationEnabled = false;
+
+                List<List> lists = new List<List>();
+                lists = db.Lists.OrderByDescending(q => q.ID).ToList();
+
+
+
+                return Json(lists, JsonRequestBehavior.AllowGet);
+            }
+            catch (DataException dex)
+            {
+                string message = dex.ToString();
+                return Json(new
+                {
+                    success = false,
+                    responseText = message,
+                    JsonRequestBehavior.AllowGet
+                });
+            }
+            finally
+            {
+                //restore ProxyCreation to its original state
+                db.Configuration.ProxyCreationEnabled = proxyCreation;
+            }
         }
 
-        public JsonResult getTask(int id)
-        {
-            List<Task> tasks = new List<Task>();
+        //public JsonResult getTask(int id)
+        //{
+        //    List<Task> tasks = new List<Task>();
 
-            tasks = db.Tasks.Where(
-            s => s.List.ID == id).OrderByDescending(q => q.ID).ToList();
+        //    tasks = db.Tasks.Where(
+        //    s => s.List.ID == id).OrderByDescending(q => q.ID).ToList();
 
-            return Json(tasks, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(tasks, JsonRequestBehavior.AllowGet);
+        //}
     }
 }
