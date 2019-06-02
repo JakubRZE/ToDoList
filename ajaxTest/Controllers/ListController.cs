@@ -52,8 +52,6 @@ namespace ajaxTest.Controllers
                 List<List> lists = new List<List>();
                 lists = db.Lists.OrderByDescending(q => q.ID).ToList();
 
-
-
                 return Json(lists, JsonRequestBehavior.AllowGet);
             }
             catch (DataException dex)
@@ -73,14 +71,33 @@ namespace ajaxTest.Controllers
             }
         }
 
-        //public JsonResult getTask(int id)
-        //{
-        //    List<Task> tasks = new List<Task>();
+        public JsonResult getTask(int id)
+        {
 
-        //    tasks = db.Tasks.Where(
-        //    s => s.List.ID == id).OrderByDescending(q => q.ID).ToList();
+            try
+            {
+                List<Task> tasks = new List<Task>();
+                tasks = db.Tasks.Where(s => s.List.ID == id).OrderByDescending(q => q.ID).ToList();
 
-        //    return Json(tasks, JsonRequestBehavior.AllowGet);
-        //}
+                var tasksVM = (from item in tasks
+                               select new TaskViewModel
+                            {
+                                Description = item.Description
+                            }).ToList();
+
+                return Json(tasksVM, JsonRequestBehavior.AllowGet);
+            }
+            catch (DataException dex)
+            {
+                string message = dex.ToString();
+                return Json(new
+                {
+                    success = false,
+                    responseText = message,
+                    JsonRequestBehavior.AllowGet
+                });
+            }
+
+        }
     }
 }

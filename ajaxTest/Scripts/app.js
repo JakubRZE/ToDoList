@@ -45,32 +45,30 @@
 });
 
 
-//$(document).on("click", "p", function (event) {
+$(document).on("click", "p", function (event) {
 
-//    debugger;
-//    var listID = event.target.id;
+    debugger;
+    var listID = event.target.id;
 
-//    $.ajax({
-//        url: '/List/getTask',
-//        method: 'GET',
-//        dataType: 'json',
-//        data: { Id: listID },
-//        success: function (data) {
-//            $.each(data, function (i, tasks) {
+    $.ajax({
+        url: '/List/getTask',
+        method: 'GET',
+        dataType: 'json',
+        data: { Id: listID },
+        success: function (data) {
+            $.each(data, function (i, tasksVM) {
+                var uuList =
+                    '<p>'+ tasksVM.Description +'</p>';
+                $('#taskList').append(uuList);
+            });
+            alert('win');
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });
 
-//                var uList =
-
-//                    '<p>' + tasks.Name +'</p>';
-
-//                $('#'+'event.target.id').append(uList);
-//            });
-//        },
-//        error: function (errorMessage) {
-//            alert('lol');
-//        }
-//    });
-
-//});
+});
 
 
 
