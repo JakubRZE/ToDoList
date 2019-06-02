@@ -43,32 +43,63 @@ namespace ajaxTest.Controllers
 
         public JsonResult getList()
         {
-            bool proxyCreation = db.Configuration.ProxyCreationEnabled;
-
             try
             {
-                db.Configuration.ProxyCreationEnabled = false;
+                var lists = db.Lists.Select(x => new ListViewModel
+                {
 
-                List<List> lists = new List<List>();
-                lists = db.Lists.OrderByDescending(q => q.ID).ToList();
+                    ID = x.ID,
+                    Name = x.Name,
+                    //CreatedAt = x.CreatedAt,
+                    Tasks = db.Tasks.Where(c=>c.ListID==x.ID).Select(y => new TaskViewModel
+                    {
+                        ID = y.ID,
+                        Description = y.Description
+                        //IsDone = y.IsDone
+                        
+                    }).OrderByDescending(o => o.ID).ToList()
+
+                }).ToList();
 
                 return Json(lists, JsonRequestBehavior.AllowGet);
             }
-            catch (DataException dex)
+            catch (Exception)
             {
-                string message = dex.ToString();
-                return Json(new
-                {
-                    success = false,
-                    responseText = message,
-                    JsonRequestBehavior.AllowGet
-                });
+                throw;
             }
-            finally
-            {
-                //restore ProxyCreation to its original state
-                db.Configuration.ProxyCreationEnabled = proxyCreation;
-            }
+
+
+
+
+            ////////////////////////////////
+
+               
+            //bool proxyCreation = db.Configuration.ProxyCreationEnabled;
+
+            //try
+            //{
+            //    db.Configuration.ProxyCreationEnabled = false;
+
+            //    List<List> lists = new List<List>();
+            //    lists = db.Lists.OrderByDescending(q => q.ID).ToList();
+
+            //    return Json(lists, JsonRequestBehavior.AllowGet);
+            //}
+            //catch (DataException dex)
+            //{
+            //    string message = dex.ToString();
+            //    return Json(new
+            //    {
+            //        success = false,
+            //        responseText = message,
+            //        JsonRequestBehavior.AllowGet
+            //    });
+            //}
+            //finally
+            //{
+            //    //restore ProxyCreation to its original state
+            //    db.Configuration.ProxyCreationEnabled = proxyCreation;
+            //}
         }
 
         public JsonResult getTask(int id)

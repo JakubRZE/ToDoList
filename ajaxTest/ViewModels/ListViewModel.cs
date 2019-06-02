@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ajaxTest.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace ajaxTest.ViewModels
@@ -12,6 +12,8 @@ namespace ajaxTest.ViewModels
 
         public string Name { get; set; }
 
-        public List<Task> Tasks { get; set; }
+        //public DateTime CreatedAt { get; set; }
+
+        public List<TaskViewModel> Tasks { get; set; }
     }
 }

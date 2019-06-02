@@ -16,6 +16,8 @@ namespace ajaxTest.Models
         [Required]
         public string Description { get; set; }
 
+        //public bool IsDone { get; set; }
+
         public virtual List List { get; set; }
     }
 }

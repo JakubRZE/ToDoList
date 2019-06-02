@@ -59,7 +59,7 @@ textarea {
 }
 
 .customFontABin {
-    margin-top: 3px !important;
+    margin-top: 3px;
     font-size: 15px;
     color: white;
     cursor: pointer;
@@ -71,18 +71,19 @@ textarea {
     }
 
 .customFontAPlus {
-    margin: 0 !important;
+    margin: 0;
     font-size: 20px;
-    color: #15ad0d;
+    color: #9933cc;
     cursor: pointer;
 }
 
     .customFontAPlus:hover {
-        color: green;
+        color: #832daf;
         cursor: pointer;
     }
 
 .coustomInput {
+    background: transparent;
     border: none;
     outline: none;
     padding: 0;

@@ -9,7 +9,7 @@ namespace ajaxTest.DAL
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext() : base("DefaultConnection")
+        public ApplicationDbContext() : base("ToDoListDB")
         {
         }
 
