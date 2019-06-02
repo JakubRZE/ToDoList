@@ -45,10 +45,18 @@
 });
 
 
-$(document).on("click", "p", function (event) {
+$(document).on("click", "[name='listedElement']", function (event) {
 
-    debugger;
     var listID = event.target.id;
+    var nameID = "[name='" + listID.toString() + "']";
+    var strID = "#" + listID.toString();
+
+    //$(strID).click(function () {
+    //    $(nameID).slideToggle();
+    //});
+
+    $(nameID).remove();
+
 
     $.ajax({
         url: '/List/getTask',
@@ -56,27 +64,36 @@ $(document).on("click", "p", function (event) {
         dataType: 'json',
         data: { Id: listID },
         success: function (data) {
-            $.each(data, function (i, tasksVM) {
+
+            var uListFirst =
+                '<div class="list-group-item customListChild" id="taskInput" name="' + listID.toString() + '" >'+
+                '<input type="text" name="' + listID.toString() + '"  class=" col-12 d-inline list-group-item coustomInput" style="display: none;" placeholder="Add new task..." required="" />' +
+                '<span class="float-right mt-2 lol customFontAPlus" id="plus">'+
+                    '<i class="fas fa-plus-circle"></i>'+
+                '</span>'+
+                '</div>';
+            $(strID).after(uListFirst);
+
+            $.each(data, function (i,tasksVM) {
+
                 var uuList =
-                    '<p>'+ tasksVM.Description +'</p>';
-                $('#taskList').append(uuList);
+                    '<p class="list-group-item customListChild" name="' + listID.toString() + '">' + tasksVM.Description + '</p>';
+                $('#taskInput').after(uuList);
+
+                $(nameID).slideDown();
             });
-            alert('win');
         },
         error: function (response) {
             alert(response.responseText);
         }
     });
-
 });
 
 
 
 
 function loadData() {
-
     $("#divTask children").remove();
-    debugger;
     $.ajax({
         url: '/List/getList',
         method: 'GET',
@@ -85,18 +102,17 @@ function loadData() {
             $.each(data, function (i, lists) {
 
                 var uList =
-                    '<p class="list-group-item customList" id="' + lists.ID + '">' +
+                    '<p class="list-group-item customList" name="listedElement" id="' + lists.ID + '">' +
                     lists.Name +
-                    '<span class="float-right mt-2 lol customFontA" id="bin">' +
+                    '<span class="float-right customFontABin" id="bin">' +
                     '<i class="far fa-trash-alt d-inline"></i>' +
                     '</span></p>';
-
                 $('#taskList').append(uList);
+                $("[name='listedElement']").slideDown();
             });
         },
         error: function (response) {
             alert(response.responseText);
         }
     });
-
 };
