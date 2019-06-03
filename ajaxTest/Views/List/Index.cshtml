@@ -28,20 +28,20 @@
 
             <div class="row">
                 <div class="col-8">
-                    <input type="text" name="listName" id="listName" class="form-control col-12 d-inline" placeholder="Add new To Do List." required="" />
+                    <input type="text" name="listName" id="listName" class="form-control col-12 d-inline" placeholder="Add new task list..." required="" />
                 </div>
                 <div class="col-4">
                     <button class="btn btn-info w-100" name="submitButton" id="btnSave" type="button">Add</button>
                 </div>
             </div>
 
-            @*success*@
-            <div class="alert alert-success" id="success" style="display:none; margin:15px">
-                <strong>Task added:) !</strong>
+            @*@*success*@
+            <div class="alert alert-success customAlert" id="success" style="display:none; margin:15px">
+                Task added :) 
             </div>
             @*error*@
-            <div class="alert alert-danger" id="error" style="display:none; margin:15px">
-                <strong>Something goes wrong :< !</strong>
+            <div class="alert alert-danger customAlert" id="error" style="display:none; margin:15px">
+                Something goes wrong :< 
             </div>
             @Html.AntiForgeryToken()
         </div>

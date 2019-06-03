@@ -45,19 +45,19 @@ namespace ajaxTest.Controllers
         {
             try
             {
-                var lists = db.Lists.Select(x => new ListViewModel
+                var lists = db.Lists.OrderByDescending(o => o.ID).Select(x => new ListViewModel
                 {
 
                     ID = x.ID,
                     Name = x.Name,
                     //CreatedAt = x.CreatedAt,
-                    Tasks = db.Tasks.Where(c=>c.ListID==x.ID).Select(y => new TaskViewModel
+                    Tasks = db.Tasks.Where(c => c.ListID == x.ID).OrderBy(o => o.ID).Select(y => new TaskViewModel
                     {
                         ID = y.ID,
                         Description = y.Description
                         //IsDone = y.IsDone
-                        
-                    }).OrderByDescending(o => o.ID).ToList()
+
+                    }).ToList()
 
                 }).ToList();
 
@@ -67,68 +67,27 @@ namespace ajaxTest.Controllers
             {
                 throw;
             }
-
-
-
-
-            ////////////////////////////////
-
-               
-            //bool proxyCreation = db.Configuration.ProxyCreationEnabled;
-
-            //try
-            //{
-            //    db.Configuration.ProxyCreationEnabled = false;
-
-            //    List<List> lists = new List<List>();
-            //    lists = db.Lists.OrderByDescending(q => q.ID).ToList();
-
-            //    return Json(lists, JsonRequestBehavior.AllowGet);
-            //}
-            //catch (DataException dex)
-            //{
-            //    string message = dex.ToString();
-            //    return Json(new
-            //    {
-            //        success = false,
-            //        responseText = message,
-            //        JsonRequestBehavior.AllowGet
-            //    });
-            //}
-            //finally
-            //{
-            //    //restore ProxyCreation to its original state
-            //    db.Configuration.ProxyCreationEnabled = proxyCreation;
-            //}
         }
 
-        public JsonResult getTask(int id)
+
+        // POST: Documents/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
+            //Document document = db.Documents.Find(id);
+            //db.Documents.Remove(document);
+            //db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-            try
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                List<Task> tasks = new List<Task>();
-                tasks = db.Tasks.Where(s => s.List.ID == id).OrderByDescending(q => q.ID).ToList();
-
-                var tasksVM = (from item in tasks
-                               select new TaskViewModel
-                            {
-                                Description = item.Description
-                            }).ToList();
-
-                return Json(tasksVM, JsonRequestBehavior.AllowGet);
+                db.Dispose();
             }
-            catch (DataException dex)
-            {
-                string message = dex.ToString();
-                return Json(new
-                {
-                    success = false,
-                    responseText = message,
-                    JsonRequestBehavior.AllowGet
-                });
-            }
-
+            base.Dispose(disposing);
         }
     }
 }
