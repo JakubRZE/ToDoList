@@ -130,6 +130,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906021932498_InitialCreate.cs" />
+    <Compile Include="Migrations\201906021932498_InitialCreate.Designer.cs">
+      <DependentUpon>201906021932498_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906041941166_isdaone_added_to_task.cs" />
+    <Compile Include="Migrations\201906041941166_isdaone_added_to_task.Designer.cs">
+      <DependentUpon>201906041941166_isdaone_added_to_task.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\List.cs" />
     <Compile Include="Models\Task.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -196,6 +205,14 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201906021932498_InitialCreate.resx">
+      <DependentUpon>201906021932498_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906041941166_isdaone_added_to_task.resx">
+      <DependentUpon>201906041941166_isdaone_added_to_task.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

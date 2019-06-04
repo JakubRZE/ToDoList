@@ -15,9 +15,6 @@ namespace ajaxTest.Models
         [Required]
         public string Name { get; set; }
 
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public DateTime CreatedAt { get; set; }
-
         public virtual ICollection<Task> Task { get; set; }
     }
 }

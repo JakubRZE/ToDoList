@@ -23,7 +23,7 @@
         var binID = event.target.id;
         var strBinId = binID.slice(1);
 
-        deleteData(strBinId, token);
+        deleteList(strBinId, token);
     });
 
 
@@ -38,12 +38,12 @@
     });
 
 
-    //delete list
+    //delete task
     $(document).on("click", "[name='taskBin']", function (event) {
         var taskBinID = event.target.id;
         var strTBinId = taskBinID.slice(2);
 
-        deleteData(strTBinId, token);
+        deleteTask(strTBinId, token);
     });
 });
 
@@ -62,14 +62,14 @@ function addList(token) {
         },
         success: function (response) {
             if (response.success) {
-                $('#success').show();
-                $('input').val('');
-                $('#success').delay(1500).fadeOut('slow');
+                //$('#success').show();
+                //$('input').val('');
+                //$('#success').delay(1500).fadeOut('slow');
                 loadData();
             } else {
-                alert(response.responseText);
-                $('#error').show();
-                $('#error').delay(1500).fadeOut('slow');
+                //alert(response.responseText);
+                //$('#error').show();
+                //$('#error').delay(1500).fadeOut('slow');
             }
         },
         error: function (response) {
@@ -78,7 +78,7 @@ function addList(token) {
     });
 };
 
-function deleteData(ID, token) {
+function deleteList(ID, token) {
     if (confirm('Are you sure to delete this record ?') == true) {
         $.ajax({
             url: "/List/DeleteList",
@@ -122,7 +122,7 @@ function addTask(listId, token) {
     });
 };
 
-function deleteData(listId, token) {
+function deleteTask(listId, token) {
     if (confirm('Are you sure to delete this task ?') == true) {
         $.ajax({
             url: "/Task/DeleteTask",
