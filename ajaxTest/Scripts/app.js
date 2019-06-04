@@ -70,7 +70,7 @@ function deleteData(ID, token) {
                 id: ID
             },
             success: function (result) {
-                location.reload();
+                loadData();
             },
             error: function (errormessage) {
                 alert(errormessage.responseText);
@@ -82,8 +82,8 @@ function deleteData(ID, token) {
 //load data function
 function loadData() {
 
-    $("#divTask children").remove();
-    jQuery('#divTask').empty();
+    $("#taskList children").remove();
+    jQuery('#taskList').empty();
 
     $.ajax({
         url: '/List/getList',
