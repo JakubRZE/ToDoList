@@ -71,14 +71,28 @@ namespace ajaxTest.Controllers
 
 
         // POST: Documents/Delete/5
-        [HttpPost, ActionName("Delete")]
+        //[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public JsonResult DeleteList(int id)
         {
-            //Document document = db.Documents.Find(id);
-            //db.Documents.Remove(document);
-            //db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                List list = db.Lists.Find(id);
+                db.Lists.Remove(list);
+                db.SaveChanges();
+            }
+            catch (DataException dex)
+            {
+                string message = dex.ToString();
+                return Json(new
+                {
+                    success = false,
+                    responseText = message,
+                    JsonRequestBehavior.AllowGet
+                });
+            }
+
+            return Json(new { success = true, JsonRequestBehavior.AllowGet });
         }
 
         protected override void Dispose(bool disposing)
