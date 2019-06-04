@@ -70,6 +70,19 @@ textarea {
         cursor: pointer;
     }
 
+.customFontABinTask {
+    margin-top: 3px;
+    margin-right: 3px;
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+}
+
+    .customFontABinTask:hover {
+        color: red;
+        cursor: pointer;
+    }
+
 .customFontAPlus {
     margin: 0;
     font-size: 20px;
@@ -96,4 +109,9 @@ textarea {
     height: 28px;
     margin: 0;
     padding: 3px;
+}
+
+.done {
+    text-decoration: line-through;
+    color: #ec9ef5;
 }

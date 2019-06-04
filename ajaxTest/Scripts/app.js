@@ -5,6 +5,8 @@
     //load data
     loadData();
 
+    //**********LIST**********
+
     // add new list by click
     $("#btnSave").on("click", function () {
         addList(token);
@@ -22,12 +24,32 @@
         var strBinId = binID.slice(1);
 
         deleteData(strBinId, token);
-        loadData();
+    });
+
+
+    //*********TASK*********
+
+    // add new TASK by click
+    $(document).on("click", "[name='addTask']", function (event) {
+        var listId = event.target.id;
+        var strlistId = listId.slice(1);
+
+        addTask(strlistId,token);
+    });
+
+
+    //delete list
+    $(document).on("click", "[name='taskBin']", function (event) {
+        var taskBinID = event.target.id;
+        var strTBinId = taskBinID.slice(2);
+
+        deleteData(strTBinId, token);
     });
 });
 
 
-//add data function
+//**********LIST**********
+
 function addList(token) {
     $.ajax({
         url: '/List/createList',
@@ -56,7 +78,6 @@ function addList(token) {
     });
 };
 
-//function for deleting 
 function deleteData(ID, token) {
     if (confirm('Are you sure to delete this record ?') == true) {
         $.ajax({
@@ -79,7 +100,53 @@ function deleteData(ID, token) {
     }
 }
 
+//*********TASK*********
+
+function addTask(listId, token) {
+    $.ajax({
+        url: '/Task/createTask',
+        method: 'POST',
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',    //gdy wysyłamy dane czasami chcemy ustawić ich typ
+        dataType: 'json',                                                   //typ danych jakich oczekujemy w odpowiedzi
+        data: {                                                             //dane do wysyłki w jsonie
+            __RequestVerificationToken: token,
+            listID: listId,
+            Description: $( "#i" + listId ).val(),
+        },
+        success: function (response) {
+            loadData();
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });
+};
+
+function deleteData(listId, token) {
+    if (confirm('Are you sure to delete this task ?') == true) {
+        $.ajax({
+            url: "/Task/DeleteTask",
+            method: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            dataType: "json",
+            data:
+            {
+                __RequestVerificationToken: token,
+                id: listId
+            },
+            success: function (result) {
+                loadData();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+}
+
+//*********DATA*********
 //load data function
+
 function loadData() {
 
     $("#taskList children").remove();
@@ -104,7 +171,11 @@ function loadData() {
 
                 //kolejna petla z taskami
                 $.each(lists.Tasks, function (i, task) {
-                    var uTask = '<p class="list-group-item customListChild" name="t' + lists.ID + '" Id="t' + task.ID + '">' + task.Description + '</p>';
+                    var uTask = '<p class="list-group-item customListChild" name="t' + lists.ID + '" Id="t' + task.ID + '">' +
+                                task.Description + 
+                                '<span class="float-right customFontABinTask">' +
+                                '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
+                                '</span></p>';
                     var taskElementID = "#" + lists.ID;
                     $(taskElementID).after(uTask);
 
@@ -113,9 +184,9 @@ function loadData() {
                 //input bar
                 var uListInput =
                     '<div class="list-group-item customListChild" name="i' + lists.ID + '">' +
-                    '<input type="text" name="taskDesc" class="col-12 d-inline list-group-item coustomInput" placeholder="Add new task..." required="" />' +
-                    '<span class="float-right customFontAPlus" id="plus">' +
-                    '<i class="fas fa-plus-circle"></i>' +
+                    '<input type="text" name="taskDesc" class="col-12 d-inline list-group-item coustomInput" Id="i' + lists.ID + '" placeholder="Add new task..." required="" />' +
+                    '<span class="float-right customFontAPlus">' +
+                    '<i class="fas fa-plus-circle" name="addTask" id="p' + lists.ID + '"></i>' +
                     '</span>' +
                     '</div>';
                 $("#" + lists.ID).after(uListInput);

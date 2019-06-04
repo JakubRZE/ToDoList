@@ -15,7 +15,8 @@ namespace ajaxTest.Controllers
     public class ListController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-        // GET: Student
+
+        // GET: 
         public ActionResult Index()
         {
             return View();
@@ -37,8 +38,6 @@ namespace ajaxTest.Controllers
             }
 
             return Json(new { success = true, JsonRequestBehavior.AllowGet });
-
-            //return Json(new { success = false, responseText = "Invalid data" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult getList()
@@ -69,8 +68,6 @@ namespace ajaxTest.Controllers
             }
         }
 
-
-        // POST: Documents/Delete/5
         //[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteList(int id)
