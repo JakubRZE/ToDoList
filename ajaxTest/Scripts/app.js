@@ -12,7 +12,7 @@
         addList(token);
     });
     // by enter
-    $(document).keyup(function (event) {
+    $("#listName").keyup(function (event) {
         if (event.keyCode === 13) {
             addList(token);
         }
@@ -34,8 +34,20 @@
         var listId = event.target.id;
         var strlistId = listId.slice(1);
 
-        addTask(strlistId,token);
+        addTask(strlistId, token);
     });
+    //by enter
+    $(document).on("focus", "[name='taskDesc']", function () {
+        $(this).on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                var listId = this.id
+                var strlistId = listId.slice(1);
+                addTask(strlistId, token);
+                return;
+            };
+        });
+    });
+
 
 
     //delete task
@@ -79,7 +91,7 @@ function addList(token) {
 };
 
 function deleteList(ID, token) {
-    if (confirm('Are you sure to delete this record ?') == true) {
+    if (confirm('Are you sure to delete this list?') == true) {
         $.ajax({
             url: "/List/DeleteList",
             method: "POST",
@@ -111,7 +123,7 @@ function addTask(listId, token) {
         data: {                                                             //dane do wysyłki w jsonie
             __RequestVerificationToken: token,
             listID: listId,
-            Description: $( "#i" + listId ).val(),
+            Description: $("#i" + listId).val(),
         },
         success: function (response) {
             loadData();
@@ -172,10 +184,10 @@ function loadData() {
                 //kolejna petla z taskami
                 $.each(lists.Tasks, function (i, task) {
                     var uTask = '<p class="list-group-item customListChild" name="t' + lists.ID + '" Id="t' + task.ID + '">' +
-                                task.Description + 
-                                '<span class="float-right customFontABinTask">' +
-                                '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
-                                '</span></p>';
+                        task.Description +
+                        '<span class="float-right customFontABinTask">' +
+                        '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
+                        '</span></p>';
                     var taskElementID = "#" + lists.ID;
                     $(taskElementID).after(uTask);
 
@@ -184,7 +196,7 @@ function loadData() {
                 //input bar
                 var uListInput =
                     '<div class="list-group-item customListChild" name="i' + lists.ID + '">' +
-                    '<input type="text" name="taskDesc" class="col-12 d-inline list-group-item coustomInput" Id="i' + lists.ID + '" placeholder="Add new task..." required="" />' +
+                    '<input autofocus type="text" name="taskDesc" class="col-12 d-inline list-group-item customInput" Id="i' + lists.ID + '" placeholder="Add new task..." required="" />' +
                     '<span class="float-right customFontAPlus">' +
                     '<i class="fas fa-plus-circle" name="addTask" id="p' + lists.ID + '"></i>' +
                     '</span>' +
@@ -199,4 +211,3 @@ function loadData() {
         }
     });
 };
-
