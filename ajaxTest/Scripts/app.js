@@ -17,7 +17,6 @@
             addList(token);
         }
     });
-
     //delete list
     $(document).on("click", "[name='bin']", function (event) {
         var binID = event.target.id;
@@ -47,8 +46,20 @@
             };
         });
     });
+    //update
+    $(document).on("click", ".customListChild", function (event) {
+        if (event.target === this) {
+            var taskId = event.target.id;
+            var strtaskId = taskId.slice(1);
 
-
+            if ($(this).hasClass("false")) {
+                updateTask(strtaskId, token, true);
+            }
+            else if ($(this).hasClass("true")) {
+                updateTask(strtaskId, token, false);
+            }
+        }
+    });
 
     //delete task
     $(document).on("click", "[name='taskBin']", function (event) {
@@ -134,6 +145,26 @@ function addTask(listId, token) {
     });
 };
 
+function updateTask(taskId, token, isdone) {
+    $.ajax({
+        url: '/Task/updateTask',
+        method: 'POST',
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',    //gdy wysyłamy dane czasami chcemy ustawić ich typ
+        dataType: 'json',                                                   //typ danych jakich oczekujemy w odpowiedzi
+        data: {                                                             //dane do wysyłki w jsonie
+            __RequestVerificationToken: token,
+            id: taskId,
+            isDone: isdone
+        },
+        success: function (response) {
+            alert('updated')
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });
+};
+
 function deleteTask(listId, token) {
     if (confirm('Are you sure to delete this task ?') == true) {
         $.ajax({
@@ -183,7 +214,7 @@ function loadData() {
 
                 //kolejna petla z taskami
                 $.each(lists.Tasks, function (i, task) {
-                    var uTask = '<p class="list-group-item customListChild" name="t' + lists.ID + '" Id="t' + task.ID + '">' +
+                    var uTask = '<p class="list-group-item customListChild ' + task.IsDone + '" name="t' + lists.ID + '" Id="t' + task.ID + '">' +
                         task.Description +
                         '<span class="float-right customFontABinTask">' +
                         '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +

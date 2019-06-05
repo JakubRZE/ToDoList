@@ -49,12 +49,11 @@ namespace ajaxTest.Controllers
 
                     ID = x.ID,
                     Name = x.Name,
-                    //CreatedAt = x.CreatedAt,
                     Tasks = db.Tasks.Where(c => c.ListID == x.ID).OrderBy(o => o.ID).Select(y => new TaskViewModel
                     {
                         ID = y.ID,
-                        Description = y.Description
-                        //IsDone = y.IsDone
+                        Description = y.Description,
+                        IsDone = y.IsDone
 
                     }).ToList()
 

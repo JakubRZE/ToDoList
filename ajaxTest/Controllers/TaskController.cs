@@ -31,6 +31,26 @@ namespace ajaxTest.Controllers
             return Json(new { success = true, JsonRequestBehavior.AllowGet });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult updateTask(int id, bool isDone)
+        {
+            try
+            {
+                Task task = db.Tasks.Find(id);
+                task.IsDone = isDone;
+                db.Entry(task).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (DataException dex)
+            {
+                string message = dex.ToString();
+                return Json(new { success = false, responseText = message, JsonRequestBehavior.AllowGet });
+            }
+
+            return Json(new { success = true, JsonRequestBehavior.AllowGet });
+        }
+
         //[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteTask(int id)
