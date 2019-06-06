@@ -2,6 +2,7 @@
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #363f46;
+    font-family: 'Kalam', cursive;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -116,5 +117,3 @@ textarea {
     color: #bbbbbb;
 }
 
-.false {
-}

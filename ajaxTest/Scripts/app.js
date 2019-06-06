@@ -8,9 +8,9 @@
     //**********LIST**********
 
     // add new list by click
-    $("#btnSave").on("click", function () {
+    $("#btnSave").on("click", function (event) {
         if ($("#listName").val() != '') {
-            addList(token);
+            addList(token, event);
         }
         else {
             $("#listName").effect("shake");
@@ -20,7 +20,7 @@
     $("#listName").keyup(function (event) {
         if (event.keyCode === 13) {
             if ($("#listName").val() != '') {
-                addList(token);
+                addList(token,event);
             }
             else {
                 $("#listName").effect("shake");
@@ -40,7 +40,7 @@
     $(document).on("click", "[name='addTask']", function (event) {
         var listId = event.target.id.slice(1);
         if ($("#i" + listId).val() != '') {
-            addTask(listId, token);
+            addTask(listId, token,event);
         }
         else {
             $("#i" + listId).effect("shake");
@@ -52,7 +52,7 @@
             if (event.keyCode == 13) {
                 var listId = event.target.id.slice(1);
                 if ($("#i" + listId).val() != '') {
-                    addTask(listId, token);
+                    addTask(listId, token,event);
                 }
                 else {
                     $("#i" + listId).effect("shake");
@@ -65,10 +65,10 @@
         if (event.target === this) {
             var taskId = event.target.id.slice(1);
             if ($(this).hasClass("false")) {
-                updateTask(taskId, token, true);
+                updateTask(taskId, token, true, event);
             }
             else if ($(this).hasClass("true")) {
-                updateTask(taskId, token, false);
+                updateTask(taskId, token, false, event);
             }
         }
     });
@@ -86,8 +86,10 @@
 
 //**********LIST**********
 
-function addList(token) {
+function addList(token, event) {
 
+    event.preventDefault();
+    event.stopImmediatePropagation();
     $("#btnSave").disabled = true;
 
     $.ajax({
@@ -137,7 +139,11 @@ function deleteList(ID, token) {
 
 //*********TASK*********
 
-function addTask(listId, token) {
+function addTask(listId, token, event) {
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
     $.ajax({
         url: '/Task/createTask',
         method: 'POST',
@@ -158,7 +164,11 @@ function addTask(listId, token) {
     });
 };
 
-function updateTask(taskId, token, isdone) {
+function updateTask(taskId, token, isdone, event) {
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
     $.ajax({
         url: '/Task/updateTask',
         method: 'POST',
@@ -262,6 +272,7 @@ function loadData() {
 function loadTask(listId) {
 
     $("[name='t" + listId + "']").remove();
+    $("[name='t" + listId + "']").empty();
 
     $.ajax({
         url: '/Task/getTask',
