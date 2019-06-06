@@ -19,10 +19,8 @@
     });
     //delete list
     $(document).on("click", "[name='bin']", function (event) {
-        var binID = event.target.id;
-        var strBinId = binID.slice(1);
-
-        deleteList(strBinId, token);
+        var binID = event.target.id.slice(1);
+        deleteList(binID, token);
     });
 
 
@@ -30,21 +28,15 @@
 
     // add new TASK by click
     $(document).on("click", "[name='addTask']", function (event) {
-        var listId = event.target.id;
-        var strlistId = listId.slice(1);
-
-        $("#i" + strlistId).val('');
-        addTask(strlistId, token);
+        var listId = event.target.id.slice(1);
+        addTask(listId, token);
     });
     //by enter
     $(document).on("focus", "[name='taskDesc']", function () {
         $(this).on('keyup', function (event) {
             if (event.keyCode == 13) {
-                var listId = this.id
-                var strlistId = listId.slice(1);
-
-                $("#i" + strlistId).val('');
-                addTask(strlistId, token);
+                var listId = this.id.slice(1);
+                addTask(listId, token);
                 return;
             };
         });
@@ -52,27 +44,25 @@
     //update
     $(document).on("click", ".customListChild", function (event) {
         if (event.target === this) {
-            var taskId = event.target.id;
-            var strtaskId = taskId.slice(1);
-
-            var listId = $(this).attr("name");
-            var strlistId = listId.slice(1);
+            var taskId = event.target.id.slice(1);
+            var listId = $(this).attr("name").slice(1);
 
             if ($(this).hasClass("false")) {
-                updateTask(strlistId, strtaskId, token, true);
+                updateTask(listId, taskId, token, true);
             }
             else if ($(this).hasClass("true")) {
-                updateTask(strlistId, strtaskId, token, false);
+                updateTask(listId, taskId, token, false);
             }
         }
     });
 
     //delete task
     $(document).on("click", "[name='taskBin']", function (event) {
-        var taskBinID = event.target.id;
-        var strTBinId = taskBinID.slice(2);
 
-        deleteTask(strTBinId, token);
+        var taskBinID = event.target.id.slice(2);
+        var listId = $(this).parent().parent().attr('name').slice(1);
+
+        deleteTask(listId, taskBinID, token);
     });
 });
 
@@ -140,9 +130,10 @@ function addTask(listId, token) {
         data: {                                                             //dane do wysyłki w jsonie
             __RequestVerificationToken: token,
             listID: listId,
-            Description: $("#i" + listId).val(),
+            Description: $("#i" + listId).val()
         },
         success: function (response) {
+            $("#i" + listId).val('');
             loadTask(listId);
         },
         error: function (response) {
@@ -151,7 +142,7 @@ function addTask(listId, token) {
     });
 };
 
-function updateTask(listId, taskId, token, isdone) {
+function updateTask(taskId, token, isdone) {
     $.ajax({
         url: '/Task/updateTask',
         method: 'POST',
@@ -177,7 +168,7 @@ function updateTask(listId, taskId, token, isdone) {
     });
 };
 
-function deleteTask(listId, token) {
+function deleteTask(listId, taskId, token) {
     if (confirm('Are you sure to delete this task ?') == true) {
         $.ajax({
             url: "/Task/DeleteTask",
@@ -187,10 +178,10 @@ function deleteTask(listId, token) {
             data:
             {
                 __RequestVerificationToken: token,
-                id: listId
+                id: taskId
             },
             success: function (result) {
-                loadData();
+                loadTask(listId);
             },
             error: function (errormessage) {
                 alert(errormessage.responseText);
