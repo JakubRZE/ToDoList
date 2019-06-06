@@ -1,5 +1,5 @@
-<h3>To Do List web application</h3>
-Fully responsive. All request send to server by JS \ AJAX.
+<h3>To Do List Web Application</h3>
+Fully responsive (bootstrap) \ User friendly interface (jQuery UI) \ All request send to server by JS (AJAX).
 
 <br /><br />
 Just write down your task, and you won't forget about anything !
