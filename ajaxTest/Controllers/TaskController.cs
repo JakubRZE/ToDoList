@@ -75,7 +75,7 @@ namespace ajaxTest.Controllers
             return Json(new { success = true, JsonRequestBehavior.AllowGet });
         }
 
-        //[HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteTask(int id)
         {

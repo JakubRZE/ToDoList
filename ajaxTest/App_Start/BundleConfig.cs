@@ -10,6 +10,7 @@ namespace ajaxTest
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery-ui-{version}.js",
                         "~/Scripts/app-effects.js",
                         "~/Scripts/app.js"
                         ));

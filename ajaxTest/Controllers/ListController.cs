@@ -67,7 +67,7 @@ namespace ajaxTest.Controllers
             }
         }
 
-        //[HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteList(int id)
         {

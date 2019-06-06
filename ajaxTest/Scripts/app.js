@@ -9,12 +9,22 @@
 
     // add new list by click
     $("#btnSave").on("click", function () {
-        addList(token);
+        if ($("#listName").val() != '') {
+            addList(token);
+        }
+        else {
+            $("#listName").effect("shake");
+        }
     });
     // by enter
     $("#listName").keyup(function (event) {
         if (event.keyCode === 13) {
-            addList(token);
+            if ($("#listName").val() != '') {
+                addList(token);
+            }
+            else {
+                $("#listName").effect("shake");
+            }
         }
     });
     //delete list
@@ -29,15 +39,24 @@
     // add new TASK by click
     $(document).on("click", "[name='addTask']", function (event) {
         var listId = event.target.id.slice(1);
-        addTask(listId, token);
+        if ($("#i" + listId).val() != '') {
+            addTask(listId, token);
+        }
+        else {
+            $("#i" + listId).effect("shake");
+        }
     });
     //by enter
     $(document).on("focus", "[name='taskDesc']", function () {
         $(this).on('keyup', function (event) {
             if (event.keyCode == 13) {
-                var listId = this.id.slice(1);
-                addTask(listId, token);
-                return;
+                var listId = event.target.id.slice(1);
+                if ($("#i" + listId).val() != '') {
+                    addTask(listId, token);
+                }
+                else {
+                    $("#i" + listId).effect("shake");
+                }
             };
         });
     });
@@ -45,13 +64,11 @@
     $(document).on("click", ".customListChild", function (event) {
         if (event.target === this) {
             var taskId = event.target.id.slice(1);
-            var listId = $(this).attr("name").slice(1);
-
             if ($(this).hasClass("false")) {
-                updateTask(listId, taskId, token, true);
+                updateTask(taskId, token, true);
             }
             else if ($(this).hasClass("true")) {
-                updateTask(listId, taskId, token, false);
+                updateTask(taskId, token, false);
             }
         }
     });
@@ -70,6 +87,9 @@
 //**********LIST**********
 
 function addList(token) {
+
+    $("#btnSave").disabled = true;
+
     $.ajax({
         url: '/List/createList',
         method: 'POST',
@@ -81,19 +101,15 @@ function addList(token) {
         },
         success: function (response) {
             if (response.success) {
-                //$('#success').show();
-                //$('#success').delay(1500).fadeOut('slow');
                 $('input').val('');
                 loadData();
-            } else {
-                //alert(response.responseText);
-                //$('#error').show();
-                //$('#error').delay(1500).fadeOut('slow');
             }
         },
         error: function (response) {
-            alert(response.responseText);
+            //alert(response.responseText);
         }
+    }).always(function () {
+        $("#btnSave").disabled = false;
     });
 };
 
@@ -113,7 +129,7 @@ function deleteList(ID, token) {
                 loadData();
             },
             error: function (errormessage) {
-                alert(errormessage.responseText);
+                //alert(errormessage.responseText);
             }
         });
     }
@@ -137,7 +153,7 @@ function addTask(listId, token) {
             loadTask(listId);
         },
         error: function (response) {
-            alert(response.responseText);
+            //alert(response.responseText);
         }
     });
 };
@@ -146,9 +162,9 @@ function updateTask(taskId, token, isdone) {
     $.ajax({
         url: '/Task/updateTask',
         method: 'POST',
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',    //gdy wysyłamy dane czasami chcemy ustawić ich typ
-        dataType: 'json',                                                   //typ danych jakich oczekujemy w odpowiedzi
-        data: {                                                             //dane do wysyłki w jsonie
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',    
+        dataType: 'json',
+        data: {                                                           
             __RequestVerificationToken: token,
             id: taskId,
             isDone: isdone
@@ -238,36 +254,35 @@ function loadData() {
             });
         },
         error: function (response) {
-            alert(response.responseText);
+            //alert(response.responseText);
         }
     });
 };
-
 // reload task
 function loadTask(listId) {
 
-    $( "[name='t" + listId + "']" ).remove();
+    $("[name='t" + listId + "']").remove();
 
     $.ajax({
         url: '/Task/getTask',
         method: 'GET',
-        dataType: 'json',                                                 
-        data: {                                                             
+        dataType: 'json',
+        data: {
             id: listId
-        },                            
+        },
         success: function (data) {
-                $.each(data .tasks, function (i, task) {
-                    var uTask = '<p class="list-group-item customListChild ' + task.IsDone + '" name="t' + data.listId + '" Id="t' + task.ID + '">' +
-                        task.Description +
-                        '<span class="float-right customFontABinTask">' +
-                        '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
-                        '</span></p>';
-                    $("[name='i" + data.listId + "']").after(uTask);
-                    $("[name='t" + data.listId + "']").show();
-                });
+            $.each(data.tasks, function (i, task) {
+                var uTask = '<p class="list-group-item customListChild ' + task.IsDone + '" name="t' + data.listId + '" Id="t' + task.ID + '">' +
+                    task.Description +
+                    '<span class="float-right customFontABinTask">' +
+                    '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
+                    '</span></p>';
+                $("[name='i" + data.listId + "']").after(uTask);
+                $("[name='t" + data.listId + "']").show();
+            });
         },
         error: function (response) {
-            alert(response.responseText);
+            //alert(response.responseText);
         }
     });
 };
