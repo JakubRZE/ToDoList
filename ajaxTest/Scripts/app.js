@@ -33,6 +33,7 @@
         var listId = event.target.id;
         var strlistId = listId.slice(1);
 
+        $("#i" + strlistId).val('');
         addTask(strlistId, token);
     });
     //by enter
@@ -41,6 +42,8 @@
             if (event.keyCode == 13) {
                 var listId = this.id
                 var strlistId = listId.slice(1);
+
+                $("#i" + strlistId).val('');
                 addTask(strlistId, token);
                 return;
             };
@@ -52,11 +55,14 @@
             var taskId = event.target.id;
             var strtaskId = taskId.slice(1);
 
+            var listId = $(this).attr("name");
+            var strlistId = listId.slice(1);
+
             if ($(this).hasClass("false")) {
-                updateTask(strtaskId, token, true);
+                updateTask(strlistId, strtaskId, token, true);
             }
             else if ($(this).hasClass("true")) {
-                updateTask(strtaskId, token, false);
+                updateTask(strlistId, strtaskId, token, false);
             }
         }
     });
@@ -86,8 +92,8 @@ function addList(token) {
         success: function (response) {
             if (response.success) {
                 //$('#success').show();
-                //$('input').val('');
                 //$('#success').delay(1500).fadeOut('slow');
+                $('input').val('');
                 loadData();
             } else {
                 //alert(response.responseText);
@@ -137,7 +143,7 @@ function addTask(listId, token) {
             Description: $("#i" + listId).val(),
         },
         success: function (response) {
-            loadData();
+            loadTask(listId);
         },
         error: function (response) {
             alert(response.responseText);
@@ -145,7 +151,7 @@ function addTask(listId, token) {
     });
 };
 
-function updateTask(taskId, token, isdone) {
+function updateTask(listId, taskId, token, isdone) {
     $.ajax({
         url: '/Task/updateTask',
         method: 'POST',
@@ -157,7 +163,13 @@ function updateTask(taskId, token, isdone) {
             isDone: isdone
         },
         success: function (response) {
-            alert('updated')
+            //loadTask(listId);
+            if (isdone) {
+                $("#t" + taskId).removeClass("false").addClass("true");
+            }
+            else {
+                $("#t" + taskId).removeClass("true").addClass("false");
+            }
         },
         error: function (response) {
             alert(response.responseText);
@@ -189,7 +201,6 @@ function deleteTask(listId, token) {
 
 //*********DATA*********
 //load data function
-
 function loadData() {
 
     $("#taskList children").remove();
@@ -219,9 +230,7 @@ function loadData() {
                         '<span class="float-right customFontABinTask">' +
                         '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
                         '</span></p>';
-                    var taskElementID = "#" + lists.ID;
-                    $(taskElementID).after(uTask);
-
+                    $("#" + lists.ID).after(uTask);
                 });
 
                 //input bar
@@ -236,6 +245,35 @@ function loadData() {
                 $("#" + lists.ID).slideDown();
 
             });
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });
+};
+
+// reload task
+function loadTask(listId) {
+
+    $( "[name='t" + listId + "']" ).remove();
+
+    $.ajax({
+        url: '/Task/getTask',
+        method: 'GET',
+        dataType: 'json',                                                 
+        data: {                                                             
+            id: listId
+        },                            
+        success: function (data) {
+                $.each(data .tasks, function (i, task) {
+                    var uTask = '<p class="list-group-item customListChild ' + task.IsDone + '" name="t' + data.listId + '" Id="t' + task.ID + '">' +
+                        task.Description +
+                        '<span class="float-right customFontABinTask">' +
+                        '<i class="far fa-trash-alt d-inline" name="taskBin" id=tb' + task.ID + '></i>' +
+                        '</span></p>';
+                    $("[name='i" + data.listId + "']").after(uTask);
+                    $("[name='t" + data.listId + "']").show();
+                });
         },
         error: function (response) {
             alert(response.responseText);

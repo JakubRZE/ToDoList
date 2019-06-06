@@ -1,5 +1,6 @@
 ﻿using ajaxTest.DAL;
 using ajaxTest.Models;
+using ajaxTest.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,9 +14,32 @@ namespace ajaxTest.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
 
+        public JsonResult getTask(int id)
+        {
+            try
+            {
+                var Tasks = db.Tasks.Where(c => c.ListID == id).OrderBy(o => o.ID).Select(y => new TaskViewModel
+                {
+                    ID = y.ID,
+                    Description = y.Description,
+                    IsDone = y.IsDone
+
+                }).ToList();
+
+                var data = new { tasks = Tasks, listId = id };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (DataException dex)
+            {
+                string message = dex.ToString();
+                return Json(new { success = false, responseText = message, JsonRequestBehavior.AllowGet });
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult createTask(Task task)
+        public JsonResult createTask(Task task)
         {
             try
             {
@@ -33,7 +57,7 @@ namespace ajaxTest.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult updateTask(int id, bool isDone)
+        public JsonResult updateTask(int id, bool isDone)
         {
             try
             {
