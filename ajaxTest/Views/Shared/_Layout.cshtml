@@ -13,15 +13,18 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="container body-content">
+    <div class="container">
         @RenderBody()
         <hr />
-        <footer class="text-center">
-            <p>@DateTime.Now.Date.ToString("dd.MM.yyyy")</p>
-        </footer>
     </div>
+    <footer class="sticky-footer">
+        <div class="copyright text-center my-auto">
+            <span>@DateTime.Now.Date.ToString("dd.MM.yyyy")</span>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

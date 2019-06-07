@@ -8,11 +8,15 @@ namespace ajaxTest
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
+                       "~/Scripts/app-effects.js",
+                       "~/Scripts/app-list.js",
+                       "~/Scripts/app-task.js"
+                       ));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui-{version}.js",
-                        "~/Scripts/app-effects.js",
-                        "~/Scripts/app.js"
+                        "~/Scripts/jquery-ui-{version}.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

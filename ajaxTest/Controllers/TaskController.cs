@@ -63,7 +63,6 @@ namespace ajaxTest.Controllers
             {
                 Task task = db.Tasks.Find(id);
                 task.IsDone = isDone;
-                db.Entry(task).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             catch (DataException dex)

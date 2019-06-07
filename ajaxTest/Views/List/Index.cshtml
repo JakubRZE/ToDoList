@@ -4,28 +4,19 @@
     ViewBag.Title = "Index";
 }
 
-<div class="container">
-
     <div class="row">
         <div class="col">
         </div>
         <div class="col-9  text-center">
-
-
             <h1>To Do List</h1>
-
-
         </div>
         <div class="col">
         </div>
     </div>
-
     <div class="row">
         <div class="col">
         </div>
         <div class="col-9" style="margin:25px;">
-
-
             <div class="row">
                 <div class="col-8">
                     <input type="text" name="listName" id="listName" class="form-control col-12 d-inline" placeholder="Add new task list..." required="" />
@@ -34,34 +25,19 @@
                     <button class="btn btn-info w-100" name="submitButton" id="btnSave" type="button">Add</button>
                 </div>
             </div>
-
-            @*@*success*@
-            <div class="alert alert-success customAlert" id="success" style="display:none; margin:15px">
-                Task added :) 
-            </div>
-            @*error*@
-            <div class="alert alert-danger customAlert" id="error" style="display:none; margin:15px">
-                Something goes wrong :< 
-            </div>
             @Html.AntiForgeryToken()
         </div>
         <div class="col">
         </div>
     </div>
-
     <hr />
-
     <div class="row">
         <div class="col">
         </div>
         <div class="col-9" id="taskList">
-            
             @*ajax content*@
-
         </div>
         <div class="col">
         </div>
     </div>
 
-
-</div>
