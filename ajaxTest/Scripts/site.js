@@ -3,9 +3,7 @@
 $(document).ready(() => {
 
     loadData();
-
-    $("#btnSave").on("click", initiateNewList);
-    $("#listName").keyup((event) => { if (event.keyCode === 13) initiateNewList });
+    eventHandler();
 
 });
 
@@ -23,7 +21,6 @@ function loadData() {
             $.each(data, (i, lists) => {
 
                 generateHtml(lists);
-                eventHandler();
 
             });
         },
@@ -66,23 +63,26 @@ function eventHandler() {
 
     //lists events 
     $(document).on("click", "[name='bin']", initiateDeleteList);
+    $("#btnSave").on("click", initiateNewList);
+    $(document).on("focus", "#listName", () => {
+        $(this).off("keyup");
+        $(this).keyup((e) => { if (e.which == 13) $("#btnSave").click() }); 
+    });
+    $(document).on("focusout", "#listName", () => {$("#listName").off("keyup")});
 
     //task events
     $(document).on("click", "[name='addTask']", initiateNewTask);
     $(document).on("focus", "[name='taskDesc']", () => {
-        $(this).off('keyup');
-        $(this).on('keyup', (event) => { if (event.keyCode == 13) initiateNewList });
+        $(this).off("keyup");
+        $(this).keyup((e) => { if (e.which == 13) initiateNewTask });
     });
-    $(document).on("focusout", "[name='taskDesc']", () => {
-        $(this).off('keyup');
-    });
+    $(document).on("focusout", "[name='taskDesc']", () => { $(this).off("keyup") });
     $(document).on("click", ".customListChild", initiateUpdateTask);
     $(document).on("click", "[name='taskBin']", initiateDeleteTask);
 }
 
 function initiateNewList(event) {
-    if ($("#listName").val()) addList(event);
-    else $("#listName").effect("shake");
+    $("#listName").val() ? addList(event) : $("#listName").effect("shake");
 }
 function initiateDeleteList() {
     var binID = event.target.id.slice(1);
