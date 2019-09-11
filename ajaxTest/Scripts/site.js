@@ -4,30 +4,12 @@ $(document).ready(() => {
 
     loadData();
 
-});
-
-function eventHandler() {
-
-    //lists events 
     $("#btnSave").on("click", initiateNewList);
     $("#listName").keyup((event) => { if (event.keyCode === 13) initiateNewList });
-    $(document).on("click", "[name='bin']", initiateDeleteList);
 
-    //task events
-    $(document).on("click", "[name='addTask']", initiateNewTask);
-    $(document).on("focus", "[name='taskDesc']", () => {
-        $(this).off('keyup');
-        $(this).on('keyup', (event) => { if (event.keyCode == 13) initiateNewList });
-    });
-    $(document).on("focusout", "[name='taskDesc']", () => {
-        $(this).off('keyup');
-    });
-    $(document).on("click", ".customListChild", initiateUpdateTask);
-    $(document).on("click", "[name='taskBin']", initiateDeleteTask);
-}
+});
 
 ///
-
 function loadData() {
 
     $("#taskList children").remove();
@@ -80,8 +62,23 @@ function generateHtml(lists) {
 
 }
 
+function eventHandler() {
 
+    //lists events 
+    $(document).on("click", "[name='bin']", initiateDeleteList);
 
+    //task events
+    $(document).on("click", "[name='addTask']", initiateNewTask);
+    $(document).on("focus", "[name='taskDesc']", () => {
+        $(this).off('keyup');
+        $(this).on('keyup', (event) => { if (event.keyCode == 13) initiateNewList });
+    });
+    $(document).on("focusout", "[name='taskDesc']", () => {
+        $(this).off('keyup');
+    });
+    $(document).on("click", ".customListChild", initiateUpdateTask);
+    $(document).on("click", "[name='taskBin']", initiateDeleteTask);
+}
 
 function initiateNewList(event) {
     if ($("#listName").val()) addList(event);
@@ -131,11 +128,6 @@ function deleteList(ID) {
             error: (errormessage) => { handleError(response) }
         });
     }
-}
-
-function handleError(response) {
-    console.log(response.responseText);
-    alert('Something goes worng :<');
 }
 
 ///
@@ -251,4 +243,11 @@ function initiateDeleteTask(event) {
     var taskBinID = event.target.id.slice(2);
     var listId = $(event.currentTarget).parent().parent().attr('name').slice(1);
     deleteTask(listId, taskBinID);
+}
+
+//
+
+function handleError(response) {
+    console.log(response.responseText);
+    alert('Something goes worng :<');
 }

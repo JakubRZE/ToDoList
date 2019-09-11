@@ -9,9 +9,8 @@ namespace ajaxTest
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                       "~/Scripts/app-effects.js",
-                       "~/Scripts/app-list.js",
-                       "~/Scripts/app-task.js"
+                       "~/Scripts/site.js",
+                       "~/Scripts/app-effects.js"
                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
